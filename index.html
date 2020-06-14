@@ -14,17 +14,16 @@
         <input type="checkbox" name="" id="repeated"><br>
         <input type="checkbox" name="" id="use_filter">
         <label for="">自訂 Filter：</label><br>
-        <textarea id="filter">
+        <textarea id="filter" cols="80" rows="15">
 (array) => {
     // array is an array of number
     // return true will keep the result
     return true
-}
-        </textarea>
+}</textarea><br>
         <button onclick="main()">計算</button><br>
         
         <label for="">結果：</label>
         <input type="text" name="" id="result" readonly><br>
-        <textarea name="" id="area" cols="30" rows="10"></textarea>
+        <textarea name="" id="area" cols="80" rows="10"></textarea>
     </body>
 </html>
