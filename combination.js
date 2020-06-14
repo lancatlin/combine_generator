@@ -1,18 +1,25 @@
-const max_result = 100000
+const max_result = 10000000
 function main() {
     let n = Number(document.getElementById("n").value)
     let k = Number(document.getElementById("k").value)
     let repeated = document.getElementById("repeated").checked
-    let customFilter
+    let no_zero_begin = document.getElementById("no_zero_begin").checked
+    var filters = []
+    if (!repeated) {
+        filters.push(repeatingFilter)
+    }
+	if (no_zero_begin) {
+		filters.push(zeroBeginFilter)
+	}
     if (document.getElementById("use_filter").checked) {
         try {
-            customFilter = eval(document.getElementById('filter').value)
+            filters.push(eval(document.getElementById('filter').value))
         } catch (e) {
             alert(e.message)
             return
         }
     }
-    let result = exhaustive(n, k, repeated, customFilter)
+    let result = exhaustive(n, k, filters)
     document.getElementById("area").value = toString(result)
     document.getElementById("result").value = result.length
 }
@@ -25,19 +32,12 @@ function toString(rows) {
     return result
 }
 
-function exhaustive(n, k, repeated, customFilter) {
+function exhaustive(n, k, filters) {
     if (Math.pow(n, k) > max_result) {
         alert(`超過最大值:${max_result}`)
         return
     }
     var result = []
-    var filters = []
-    if (!repeated) {
-        filters.push(repeatingFilter)
-    }
-    if (customFilter != undefined) {
-        filters.push(customFilter)
-    }
     exhaustive_operation(k, [])
     return result
 
@@ -64,7 +64,12 @@ function exhaustive(n, k, repeated, customFilter) {
         return true
     }
 
-    function repeatingFilter(array) {
-        return (new Set(array)).size === array.length;
-    }
+}
+
+function repeatingFilter(array) {
+	return (new Set(array)).size === array.length;
+}
+
+function zeroBeginFilter(array) {
+	return array[0] != 0
 }
