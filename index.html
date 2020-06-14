@@ -9,7 +9,17 @@
         <label for="">從幾個元素</label>
         <input type="number" name="" id="n"><br>
         <label for="">取出幾個項目</label>
-        <input type="number" name="" id="k">
+        <input type="number" name="" id="k"><br>
+        <label for="repeated">重複：</label>
+        <input type="checkbox" name="" id="repeated"><br>
+        <label for="">自訂 Filter：</label><br>
+        <textarea id="filter">
+(array) => {
+    // array is an array of number
+    // return true will keep the result
+    return true
+}
+        </textarea>
         <button onclick="main()">計算</button><br>
         
         <label for="">結果：</label>

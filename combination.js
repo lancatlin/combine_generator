@@ -2,7 +2,7 @@ const max_result = 100000
 function main() {
     let n = Number(document.getElementById("n").value)
     let k = Number(document.getElementById("k").value)
-    let repeated = true
+    let repeated = document.getElementById("repeated").checked
     let result = exhaustive(n, k, repeated)
     document.getElementById("area").value = toString(result)
     document.getElementById("result").value = result.length
@@ -21,21 +21,44 @@ function exhaustive(n, k, repeated) {
         alert(`超過最大值:${max_result}`)
         return
     }
-    if (repeated) {
-        var result = []
-        exhaustive_repeated(k, [])
-        return result
+    var result = []
+    var filters = []
+    if (!repeated) {
+        filters.push(repeatingFilter)
     }
+    try {
+        filters.push(eval(document.getElementById('filter').value))
+    } catch (e) {
+        alert(e)
+        return
+    }
+    exhaustive_operation(k, [])
+    return result
 
-    function exhaustive_repeated(k, existing) {
-        if (k == 0) {
-            result.push(existing)
-            return
-        }
+    function exhaustive_operation(k, existing) {
         for (let i = 0; i < n; i++) {
             let child = existing.slice()
             child.push(i)
-            exhaustive_repeated(k-1, child)
+            if (k > 1) {
+                exhaustive_operation(k - 1, child)
+            } else {
+                if (filter(child)) {
+                    result.push(child)
+                }
+            }
         }
+    }
+
+    function filter(row) {
+        for (let f of filters) {
+            if (!f(row)) {
+                return false
+            }
+        }
+        return true
+    }
+
+    function repeatingFilter(array) {
+        return (new Set(array)).size === array.length;
     }
 }
