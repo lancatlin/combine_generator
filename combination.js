@@ -3,7 +3,16 @@ function main() {
     let n = Number(document.getElementById("n").value)
     let k = Number(document.getElementById("k").value)
     let repeated = document.getElementById("repeated").checked
-    let result = exhaustive(n, k, repeated)
+    let customFilter
+    if (document.getElementById("use_filter").checked) {
+        try {
+            customFilter = eval(document.getElementById('filter').value)
+        } catch (e) {
+            alert(e.message)
+            return
+        }
+    }
+    let result = exhaustive(n, k, repeated, customFilter)
     document.getElementById("area").value = toString(result)
     document.getElementById("result").value = result.length
 }
@@ -16,7 +25,7 @@ function toString(rows) {
     return result
 }
 
-function exhaustive(n, k, repeated) {
+function exhaustive(n, k, repeated, customFilter) {
     if (Math.pow(n, k) > max_result) {
         alert(`超過最大值:${max_result}`)
         return
@@ -26,11 +35,8 @@ function exhaustive(n, k, repeated) {
     if (!repeated) {
         filters.push(repeatingFilter)
     }
-    try {
-        filters.push(eval(document.getElementById('filter').value))
-    } catch (e) {
-        alert(e)
-        return
+    if (customFilter != undefined) {
+        filters.push(customFilter)
     }
     exhaustive_operation(k, [])
     return result
