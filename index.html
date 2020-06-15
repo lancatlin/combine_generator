@@ -8,14 +8,22 @@
         <h1>排列組合計算機</h1>
         <label for="">從幾個元素</label>
         <input type="number" name="" id="n"><br>
+
         <label for="">取出幾個項目</label>
         <input type="number" name="" id="k"><br>
-        <label for="repeated">重複：</label>
-        <input type="checkbox" name="" id="repeated"><br>
-		<label>首項非0</label>
-		<input type="checkbox" id="no_zero_begin"><br>
+
+        <input type="checkbox" name="" id="repeated">
+        <label for="repeated">重複</label>
+
+		<input type="checkbox" id="combination">
+		<label>組合</label>
+
+		<input type="checkbox" id="no_zero_begin">
+		<label>首項非0</label><br>
+
         <input type="checkbox" name="" id="use_filter">
         <label for="">自訂 Filter：</label><br>
+
         <textarea id="filter" cols="80" rows="15">
 (array) => {
     // array is an array of number

@@ -1,15 +1,17 @@
 const max_result = 10000000
+
 function main() {
     let n = Number(document.getElementById("n").value)
     let k = Number(document.getElementById("k").value)
-    let repeated = document.getElementById("repeated").checked
-    let no_zero_begin = document.getElementById("no_zero_begin").checked
     var filters = []
-    if (!repeated) {
+    if (!document.getElementById("repeated").checked) {
         filters.push(repeatingFilter)
     }
-	if (no_zero_begin) {
+	if (document.getElementById("no_zero_begin").checked) {
 		filters.push(zeroBeginFilter)
+	}
+	if (document.getElementById("combination").checked) {
+		filters.push(combinationFilter)
 	}
     if (document.getElementById("use_filter").checked) {
         try {
@@ -72,4 +74,11 @@ function repeatingFilter(array) {
 
 function zeroBeginFilter(array) {
 	return array[0] != 0
+}
+
+function combinationFilter(array) {
+	for (let i = 0; i < array.length - 1; i++) {
+		if (array[i] > array[i+1]) return false
+	}
+	return true
 }
