@@ -1,4 +1,4 @@
-const max_result = 10000000
+const max_result = 10000000000
 function main() {
     let n = Number(document.getElementById("n").value)
     let k = Number(document.getElementById("k").value)
