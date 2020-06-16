@@ -32,9 +32,6 @@ class Computer {
         this.n = n
         this.k = k
         this.repeating = repeating
-		if (!repeating) {
-			filters.unshift(repeatingFilter)
-		}
         this.grouping = grouping
         this.filters = filters
         this.result = []
@@ -57,25 +54,42 @@ class Computer {
 
     execute() {
         this.checkOverflow()
-        this.exhaustive(this.k, [])
+        this.exhaustive(0, [])
     }
 
-    exhaustive(k, existing) {
+    exhaustive(counter, existing) {
         let begin = 0
         if (this.grouping && existing.length > 0) {
             begin = existing[existing.length - 1]
         }
-        for (let i = begin; i < this.n; i++) {
+        let end = this.n
+        if (!this.repeating) {
+            end -= counter
+        }
+        for (let i = begin; i < end; i++) {
             let child = existing.slice()
             child.push(i)
-            if (k > 1) {
-                this.exhaustive(k - 1, child)
+            if (counter < this.k-1) {
+                this.exhaustive(counter + 1, child)
             } else {
+                if (!this.repeating) {
+                    child = this.transform(child)
+                }
                 if (this.filter(child)) {
                     this.result.push(child)
                 }
             }
         }
+    }
+
+    transform(array) {
+        let result = []
+        let values = Array.from(Array(this.n).keys())
+        for (let i of array) {
+            result.push(values[i])
+            values.splice(i, 1)
+        }
+        return result
     }
 
     filter(array) {
