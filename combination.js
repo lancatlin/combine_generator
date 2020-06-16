@@ -1,17 +1,13 @@
-const max_result = 10000000000
+const max_cost = 1e9
 
 function main() {
     let n = Number(document.getElementById("n").value)
     let k = Number(document.getElementById("k").value)
     var filters = []
-    if (!document.getElementById("repeated").checked) {
-        filters.push(repeatingFilter)
-    }
+    let repeating = document.getElementById("repeating").checked
+	let grouping = document.getElementById("grouping").checked 
 	if (document.getElementById("no_zero_begin").checked) {
 		filters.push(zeroBeginFilter)
-	}
-	if (document.getElementById("combination").checked) {
-		filters.push(combinationFilter)
 	}
     if (document.getElementById("use_filter").checked) {
         try {
@@ -21,51 +17,94 @@ function main() {
             return
         }
     }
-    let result = exhaustive(n, k, filters)
-    document.getElementById("area").value = toString(result)
-    document.getElementById("result").value = result.length
+    let computer = new Computer(n, k, repeating, grouping, filters)
+    try {
+        computer.execute()
+        document.getElementById("area").value = computer.allResult()
+        document.getElementById("result").value = computer.resultNumber()
+    } catch (error) {
+        alert(error) 
+    }
 }
 
-function toString(rows) {
-    let result = []
-    for (let row of rows) {
-        result.push(row.join(""))
+class Computer {
+    constructor (n, k, repeating, grouping, filters) {
+        this.n = n
+        this.k = k
+        this.repeating = repeating
+        this.grouping = grouping
+        this.filters = filters
+        this.result = []
     }
-    return result
-}
 
-function exhaustive(n, k, filters) {
-    if (Math.pow(n, k) > max_result) {
-        alert(`超過最大值:${max_result}`)
-        return
+    isOverflow() {
+        let result
+        if (this.repeating) {
+            result = Math.pow(this.n, this.k)
+        } else {
+            result = factorial(this.n, this.k)
+            this.filters.push(repeatingFilter)
+        }
+        if (this.grouping) {
+            result /= factorial(this.k)
+        }
+        console.log('result:', result)
+        return result > max_cost
     }
-    var result = []
-    exhaustive_operation(k, [])
-    return result
 
-    function exhaustive_operation(k, existing) {
-        for (let i = 0; i < n; i++) {
+    execute() {
+        if (this.isOverflow()) {
+            throw Error(`超過運算上限：${max_cost}`)
+        }
+        this.exhaustive(this.k, [])
+    }
+
+    exhaustive(k, existing) {
+        let begin = 0
+        if (this.grouping && existing.length > 0) {
+            begin = existing[existing.length - 1]
+        }
+        for (let i = begin; i < this.n; i++) {
             let child = existing.slice()
             child.push(i)
             if (k > 1) {
-                exhaustive_operation(k - 1, child)
+                this.exhaustive(k - 1, child)
             } else {
-                if (filter(child)) {
-                    result.push(child)
+                if (this.filter(child)) {
+                    this.result.push(child)
                 }
             }
         }
     }
 
-    function filter(row) {
-        for (let f of filters) {
-            if (!f(row)) {
+    filter(array) {
+        for (let f of this.filters) {
+            if (!f(array)) {
                 return false
             }
         }
         return true
     }
 
+    allResult() {
+        let result = []
+        for (let row of this.result) {
+            result.push(row.join(""))
+        }
+        return result.join(" ")
+    }
+
+    resultNumber() {
+        return this.result.length
+    }
+}
+
+function factorial(n, k=n) {
+    let result = 1
+    for (let i = 0; i < k; i++) {
+        result *= n - i
+    }
+    return result
 }
 
 function repeatingFilter(array) {
@@ -74,11 +113,4 @@ function repeatingFilter(array) {
 
 function zeroBeginFilter(array) {
 	return array[0] != 0
-}
-
-function combinationFilter(array) {
-	for (let i = 0; i < array.length - 1; i++) {
-		if (array[i] > array[i+1]) return false
-	}
-	return true
 }
