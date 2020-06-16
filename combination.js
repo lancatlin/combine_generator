@@ -40,11 +40,13 @@ class Computer {
     checkOverflow() {
         let result
         if (this.grouping) {
-			// 組合
-			result = factorial(this.n + this.k - 1) / (factorial(this.k) * factorial(this.n - 1))
+            // 組合
+            if (this.repeating) result = factorial(this.n + this.k - 1) / (factorial(this.k) * factorial(this.n - 1)) 
+            else result = factorial(this.n, this.k) / factorial(this.k)
         } else {
 			// 重複排列
-			result = Math.pow(this.n, this.k)
+            if (this.repeating) result = Math.pow(this.n, this.k)
+            else result = factorial(this.n, this.k)
         }
         console.log('時間複雜度:', result)
         if (result > max_cost) {
