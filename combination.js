@@ -1,4 +1,4 @@
-const max_cost = 1e9
+const max_cost = 1e8
 
 function main() {
     let n = Number(document.getElementById("n").value)
@@ -32,30 +32,31 @@ class Computer {
         this.n = n
         this.k = k
         this.repeating = repeating
+		if (!repeating) {
+			filters.unshift(repeatingFilter)
+		}
         this.grouping = grouping
         this.filters = filters
         this.result = []
     }
 
-    isOverflow() {
+    checkOverflow() {
         let result
-        if (this.repeating) {
-            result = Math.pow(this.n, this.k)
-        } else {
-            result = factorial(this.n, this.k)
-            this.filters.push(repeatingFilter)
-        }
         if (this.grouping) {
-            result /= factorial(this.k)
+			// 組合
+			result = factorial(this.n + this.k - 1) / (factorial(this.k) * factorial(this.n - 1))
+        } else {
+			// 重複排列
+			result = Math.pow(this.n, this.k)
         }
-        console.log('result:', result)
-        return result > max_cost
+        console.log('時間複雜度:', result)
+        if (result > max_cost) {
+            throw Error(`${result} 超過運算上限： ${max_cost}`)
+        }
     }
 
     execute() {
-        if (this.isOverflow()) {
-            throw Error(`超過運算上限：${max_cost}`)
-        }
+        this.checkOverflow()
         this.exhaustive(this.k, [])
     }
 
