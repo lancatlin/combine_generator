@@ -1,58 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>排列組合計算機</title>
-        <script src="combination.js"></script>
-		<!-- Matomo -->
-		<script type="text/javascript">
-			var _paq = window._paq || [];
-			/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-			_paq.push(['trackPageView']);
-			_paq.push(['enableLinkTracking']);
-			(function() {
-				var u="//matomo.wancat.cc/";
-				_paq.push(['setTrackerUrl', u+'matomo.php']);
-				_paq.push(['setSiteId', '5']);
-				var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-				g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-			})();
-		</script>
-		<!-- End Matomo Code -->
 
-    </head>
-    <body>
+<head>
+    <title>排列組合計算機</title>
+    <script src="combination.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="utils.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
         <h1>排列組合計算機</h1>
-		<h3><a href="https://github.com/lancatlin/combine_generator">GitHub 使用說明</a><br></h3>
-        <label for="">從幾個元素</label>
-        <input type="number" name="" id="n"><br>
+        <h3><a href="https://github.com/lancatlin/combine_generator">GitHub 使用說明</a><br></h3>
+        <label for="">從幾個元素：<input type="number" name="" id="n"></label>
+        <label for="">取出幾個項目：<input type="number" name="" id="k"></label>
+        <label for="repeated"><input type="checkbox" name="" id="repeating">重複</label>
+        <label><input type="checkbox" id="grouping">組合</label>
+        <label><input type="checkbox" id="no_zero_begin">首項非0</label>
+        <label for=""><input type="checkbox" name="" id="use_filter">自訂篩選器：</label>
 
-        <label for="">取出幾個項目</label>
-        <input type="number" name="" id="k"><br>
-
-        <input type="checkbox" name="" id="repeating">
-        <label for="repeated">重複</label>
-
-		<input type="checkbox" id="grouping">
-		<label>組合</label>
-
-		<input type="checkbox" id="no_zero_begin">
-		<label>首項非0</label><br>
-
-        <input type="checkbox" name="" id="use_filter">
-        <label for="">自訂篩選器：</label><br>
-
-        <textarea id="filter" cols="80" rows="15">
+        <textarea id="filter" cols="30">
 (array) => {
     // array is an array of number
     // return true will keep the result
     return true
 }</textarea><br>
         <button onclick="main()">計算</button><br>
-        
-        <label for="">結果：</label>
-        <input type="text" name="" id="result" readonly><br>
-        <textarea name="" id="area" cols="80" rows="10"></textarea>
-		<h3>對你有幫助嗎？拍手鼓勵我！</h3>
-		<iframe class="LikeCoin" height="235" src="https://button.like.co/in/embed/wancatserver/button?referrer=https://lancatlin.github.io/combine_generator/" width="100%" frameborder=0></iframe>
-    </body>
+
+        <label for="">結果：<input type="text" name="" id="result" readonly></label>
+        <textarea name="" id="area" cols="80" rows="10" readonly></textarea>
+        <h3>對你有幫助嗎？拍手鼓勵我！</h3>
+        <iframe class="LikeCoin" height="235"
+            src="https://button.like.co/in/embed/wancatserver/button?referrer=https://lancatlin.github.io/combine_generator/"
+            width="100%" frameborder=0></iframe>
+    </div>
+</body>
+
 </html>
